@@ -90,7 +90,8 @@ The final model architecture (model.py lines 77-90) consisted of a convolution n
 
 Here is a visualization of the architecture :
 
-|Layer | Description | Parameters |
+|Layer  | Description | Parameters |
+|-------|-------------|------------|
 |Layer 1| Lambda| normalization, input=160x320x3 | 
 |Layer 2| Cropping2D| crop rows, top=70, bottom=25, new size=65x320x3 | 
 |Layer 3| CNN 24x5x5 | relu activation|
