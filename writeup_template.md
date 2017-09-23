@@ -123,7 +123,7 @@ To augment the data sat, I also flipped images and angles thinking that this wou
 ![alt text][image7]
 
 
-After the collection process, I had 48,250 number of data points. I then preprocessed this data by Gaussian Filter.
+After the collection process, I had 50,250 number of data points. I then preprocessed this data by Gaussian Filter.
 
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
