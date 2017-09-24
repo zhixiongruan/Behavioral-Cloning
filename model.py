@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 
 # 读取 csv 日志数据
 samples = []
-with open('./driving_log.csv') as csvfile:
+with open('./data/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
     for line in reader:
         samples.append(line)
@@ -21,8 +21,8 @@ with open('./driving_log.csv') as csvfile:
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
 # 获得图片和转角
-def image_and_angle_from_data(batch_sample, camera_position):
-    name = './data/IMG/'+batch_sample[camera_position].split('/')[-1]
+def get_image_and_angle(batch_sample, position):
+    name = './data/IMG/'+batch_sample[position].split('/')[-1]
     image = cv2.imread(name)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = cv2.GaussianBlur(image, (3,3),0)
@@ -42,31 +42,29 @@ def generator(samples, batch_size=32):
             angles = []
             for batch_sample in batch_samples:
                 # 从中心，左和右的相机中读取图像和转向测量
-                center_image, center_angle = image_and_angle_from_data(batch_sample, 0)
+                center_image, center_angle = get_image_and_angle(batch_sample, 0)
                 images.append(center_image)
+                images.append(cv2.flip(center_image, 1))
                 angles.append(center_angle)
+                angles.append(center_angle * -1.0)
 
-                left_image, left_angle = image_and_angle_from_data(batch_sample, 1)
+                left_image, left_angle = get_image_and_angle(batch_sample, 1)
                 left_angle = center_angle + 0.2
                 images.append(left_image)
+                images.append(cv2.flip(left_image, 1))
                 angles.append(left_angle)
+                angles.append(left_angle * -1.0)
 
-                right_image, right_angle = image_and_angle_from_data(batch_sample, 2)
+                right_image, right_angle = get_image_and_angle(batch_sample, 2)
                 right_angle = center_angle - 0.2
                 images.append(right_image)
+                images.append(cv2.flip(right_image, 1))
                 angles.append(right_angle)
-
-            # 包含翻转图像
-            augmented_images, augmented_angles = [], []
-            for image, angle in zip(images, angles):
-                augmented_images.append(image)
-                augmented_angles.append(angle)
-                augmented_images.append(cv2.flip(image, 1))
-                augmented_angles.append(angle * -1.0)
+                angles.append(right_angle * -1.0)
 
             # 得到训练数据和验证数据
-            X_train = np.array(augmented_images)
-            y_train = np.array(augmented_angles)
+            X_train = np.array(images)
+            y_train = np.array(angles)
             yield sklearn.utils.shuffle(X_train, y_train)
 
 # 用 generator 方法获得训练模型和验证模型
@@ -81,10 +79,10 @@ model.add(Convolution2D(24, 5, 5, subsample=(2, 2), activation="relu"))
 model.add(Convolution2D(36, 5, 5, subsample=(2, 2), activation="relu"))
 model.add(Convolution2D(48, 5, 5, subsample=(2, 2), activation="relu"))
 model.add(Convolution2D(64, 3, 3, activation="relu"))
-model.add(Convolution2D(64, 3, 3))
+model.add(Convolution2D(64, 3, 3, activation='relu'))
 model.add(Dropout(0.2))
 model.add(Flatten())
-model.add(Dense(100, activation='relu'))
+model.add(Dense(100))
 model.add(Dense(50))
 model.add(Dense(10))
 model.add(Dense(1))
