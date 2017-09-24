@@ -48,19 +48,19 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 5x5 and 3x3 filter sizes and depths between 32 and 64, which is the same model as NVIDIA. (model.py lines 77-90) 
+My model consists of a convolution neural network with 5x5 and 3x3 filter sizes and depths between 32 and 64, which is the same model as NVIDIA. (model.py lines 75-88)
 
-The model includes RELU layers to introduce nonlinearity (model.py lines 80-83,87), and the data is normalized in the model using a Keras lambda layer (model.py line 78), also, Dropout layer (model.py line 85)
+The model includes RELU layers to introduce nonlinearity (model.py lines 78-82), and the data is normalized in the model using a Keras lambda layer (model.py line 76), also, Dropout layer (model.py line 83)
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 85). 
+The model contains dropout layers in order to reduce overfitting (model.py lines 83).
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (model.py line 92-93). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting (model.py line 90-91). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 92).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 90).
 
 #### 4. Appropriate training data
 
@@ -84,7 +84,7 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 77-90) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 75-88) consisted of a convolution neural network with the following layers and layer sizes ...
 
 Here is a visualization of the architecture :
 
@@ -96,10 +96,10 @@ Here is a visualization of the architecture :
 |Layer 4| CNN 36x5x5 | relu activation|
 |Layer 5| CNN 48x5x5 | relu activation|
 |Layer 6| CNN 64x3x3 | relu activation|
-|Layer 7| CNN 64x3x3 ||
+|Layer 7| CNN 64x3x3 | relu activation|
 |Layer 8| Dropout |0.2|
 |Layer 9| Flatten ||
-|Layer 10| Dense |100, relu activation|
+|Layer 10| Dense |100|
 |Layer 11| Dense |50|
 |Layer 12| Dense |10|
 |Layer 13| Dense |1|
@@ -115,6 +115,8 @@ I then recorded the vehicle recovering from the left side and right sides of the
 ![alt text][image3]
 ![alt text][image4]
 
+Then I repeated this process on track two in order to get more data points.
+
 To augment the data sat, I also flipped images and angles thinking that this would mitigate the diviation of the data, because there are almost left curves only in the first track. For example, here is an image that has then been flipped:
 
 ![alt text][image6]
@@ -122,7 +124,6 @@ To augment the data sat, I also flipped images and angles thinking that this wou
 
 
 After the collection process, I had 50,250 number of data points. I then preprocessed this data by Gaussian Filter.
-
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
